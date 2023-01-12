@@ -5,7 +5,7 @@ import core.DImage;
 import java.util.Arrays;
 
 public class ConvolutionFilter implements PixelFilter{
-    private double[][] kernel = {{-2, -1, 0}, {-1, 1, 1}, {0, 1, 2}};
+    private double[][] kernel = {{0.111111, 0.111111, 0.111111}, {0.111111, 0.111111, 0.111111}, {0.111111, 0.111111, 0.111111}};
 
     @Override
     public DImage processImage(DImage img) {
@@ -22,8 +22,8 @@ public class ConvolutionFilter implements PixelFilter{
     }
     private void applyKernel(int x, int y, int[][] in, int[][] out){
         //TODO: clean up this BS, try to generalize
-        int xO = kernel.length/2;
-        int yO = kernel[0].length/2;
+        int xO = kernel.length>>1;
+        int yO = kernel[0].length>>1;
         int r = 0;
         int g = 0;
         int b = 0;

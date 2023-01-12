@@ -7,7 +7,6 @@ import javax.xml.crypto.Data;
 
 public class invertFilter implements PixelFilter{
     private static final int thing = 0xffffff;
-    private static final int thing2 = 0xff000000;
     public DImage processImage(DImage img) {
         int[][] data = img.getColorPixelGrid();
         int[][] newData = new int[data.length][data[0].length];
