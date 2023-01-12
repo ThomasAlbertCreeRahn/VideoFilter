@@ -1,7 +1,6 @@
 import core.*;
 
 public class RunMe {
-    int hello;
 
     public static void main(String[] args) {
         // --== Load an image to filter ==--
