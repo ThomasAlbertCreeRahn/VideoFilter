@@ -5,7 +5,7 @@ import core.DImage;
 import java.util.Arrays;
 
 public class ConvolutionFilter implements PixelFilter{
-    private double[][] kernel = {{1, 2, 1}, {0, 1, 0}, {-1, -2, -1}};
+    private double[][] kernel = {{-2, -1, 0}, {-1, 1, 1}, {0, 1, 2}};
 
     @Override
     public DImage processImage(DImage img) {
@@ -38,10 +38,10 @@ public class ConvolutionFilter implements PixelFilter{
         }
         r = Math.max(0, Math.min(r, 0xff0000));
         g = Math.max(0, Math.min(g, 0xff00));
-        b = Math.max(0, Math.min(b, 255));
+        b = Math.max(0, Math.min(b, 0xff));
 
         out[x][y] = r + g + b;
-        out[x][y]|=(255 << 24);
+        out[x][y]|=(0xff << 24);
     }
     private static boolean isInBounds(int[][] arr, int x, int y){
         return x >= 0 && x < arr.length && y >= 0 && y < arr[0].length;
