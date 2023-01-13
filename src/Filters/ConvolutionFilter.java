@@ -5,7 +5,12 @@ import core.DImage;
 import java.util.Arrays;
 
 public class ConvolutionFilter implements PixelFilter{
-    private double[][] kernel = {{0, -1, 0}, {-1, 5, -1}, {0, -1, 0}};
+    private double[][] kernel = {
+            {-1, -1, -1},
+            {-1, 8, -1},
+            {-1, -1, -1}
+    };
+    //make a better UI to change the system
     @Override
     public DImage processImage(DImage img) {
         int[][] data = img.getColorPixelGrid();
