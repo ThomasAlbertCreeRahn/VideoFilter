@@ -6,9 +6,9 @@ import java.util.Arrays;
 
 public class ConvolutionFilter implements PixelFilter{
     private double[][] kernel = {
-            {-1, -1, -1},
-            {-1, 8, -1},
-            {-1, -1, -1}
+            {-2, -1, 0},
+            {-1, 1, 1},
+            {0, 1, 2}
     };
     //make a better UI to change the system
     @Override
