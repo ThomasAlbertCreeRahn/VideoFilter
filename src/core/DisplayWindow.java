@@ -1,5 +1,6 @@
 package core;
 
+import Interfaces.ContinuousInteractive;
 import Interfaces.Drawable;
 import Interfaces.Interactive;
 import Interfaces.PixelFilter;
@@ -218,6 +219,10 @@ public class DisplayWindow extends PApplet {
             initiallyPaused = false;
             paused = true;
         }
+
+        if (filter != null && frame != null && (filter instanceof ContinuousInteractive)) {
+            ((ContinuousInteractive) filter).normalFrame(getImageMouseX(frame), getImageMouseY(frame), frame);
+        }
     }
 
     private String colorStringAt(int mouseX, int mouseY) {
@@ -309,7 +314,7 @@ public class DisplayWindow extends PApplet {
         }
 
         if (frame != null && (filter instanceof Interactive)) {
-            ((Interactive) filter).keyPressed(key);
+            ((Interactive) filter).keyPressed(key );
         }
     }
 
