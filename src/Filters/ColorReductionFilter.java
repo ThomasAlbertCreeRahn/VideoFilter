@@ -14,9 +14,12 @@ public class ColorReductionFilter implements PixelFilter{
     }
     private static DImage process(DImage d, int numColors){
         int[][] data = reduceColors(d.getColorPixelGrid(), numColors);
-        DImage out = new DImage(d.getWidth(), d.getHeight());
-        out.setPixels(data);
-        return out;
+        return toDImage(data);
+    }
+    protected static DImage toDImage(int[][] data){
+        DImage d = new DImage(data[0].length, data.length);
+        d.setPixels(data);
+        return d;
     }
     private static point3D[] colorsSelected(point3D[][] data, point3D[] initial){
         point3D[] postStep = downwardSpiral(data, initial);
@@ -26,10 +29,10 @@ public class ColorReductionFilter implements PixelFilter{
         }
         return initial;
     }
-    private static point3D[] colorsSelected(point3D[][] data, int numColors){
+    protected static point3D[] colorsSelected(point3D[][] data, int numColors){
         point3D[] randomPts = new point3D[numColors];
         for (int i = 0; i < randomPts.length; i++) {
-            randomPts[i] = new point3D((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+            randomPts[i] = data[(int)(Math.random()*data.length)][(int)(Math.random()*data[0].length)];
         }
         return colorsSelected(data, randomPts);
     }
@@ -59,22 +62,26 @@ public class ColorReductionFilter implements PixelFilter{
         }
         return out;
     }
-    private static int[][] reduceColors(int[][] data, int numColors){
+    protected static point3D[][] splitColors(int[][] data){
         point3D[][] stuff = new point3D[data.length][data[0].length];
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[0].length; j++) {
-                int r = ((data[i][j]>>16)&255);
-                int g = ((data[i][j]>>8)&255);
-                int b = (data[i][j]&255);
-                stuff[i][j] = new point3D(r, g, b);
+                stuff[i][j] = new point3D(data[i][j]);
             }
         }
+        return stuff;
+    }
+    private static int[][] reduceColors(int[][] data, int numColors){
+        point3D[][] stuff = splitColors(data);
         point3D[] choices = colorsSelected(stuff, numColors);
+        return convertToIntArr(choices, stuff);
+    }
+    protected static int[][] convertToIntArr(point3D[] choices, point3D[][] data){
         int[] colors = getColors(choices);
         int[][] out = new int[data.length][data[0].length];
         for (int i = 0; i < out.length; i++) {
             for (int j = 0; j < out[0].length; j++) {
-                out[i][j] = colors[chooseClosest(stuff[i][j], choices)];
+                out[i][j] = colors[chooseClosest(data[i][j], choices)];
             }
         }
         return out;
@@ -86,6 +93,7 @@ public class ColorReductionFilter implements PixelFilter{
         }
         return out;
     }
+    //this is just terrible practice, using it this way is just... bad.
     private static int chooseClosest(point3D p, point3D[] potential){
         int out = -1;
         double minDist = Double.MAX_VALUE;
@@ -98,12 +106,17 @@ public class ColorReductionFilter implements PixelFilter{
         }
         return out;
     }
-    private static class point3D{
+    protected static class point3D{
         short x, y, z;
         public point3D(int x, int y, int z){
             this.x = (short)x;
             this.y = (short)y;
             this.z = (short)z;
+        }
+        public point3D(int in){
+            this.x = (short)((in>>16)&255);
+            this.y = (short)((in>>8)&255);
+            this.z = (short)(in&255);
         }
         public static double dist(point3D a, point3D b){
             return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y) + (a.z - b.z)*(a.z - b.z);
@@ -111,9 +124,8 @@ public class ColorReductionFilter implements PixelFilter{
         public int toInt(){
             return z | (y << 8) | (x << 16);
         }
-
     }
-    private static class clusterAvg{
+    protected static class clusterAvg{
         int numAssociated;
         long x, y, z;
         public clusterAvg(long x, long y, long z){
