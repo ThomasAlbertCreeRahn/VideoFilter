@@ -1,0 +1,19 @@
+Not Started:
+PuzzleFilter
+HilbertDither
+MyDithering (idk)
+Pixelate
+saturate
+
+
+To Fix:
+advancedBWFilter
+(ordered Dithering)
+object tracking
+
+
+Ideas:
+MultipleFilter, you input n filters and then those are applied in order
+WhatsUrNumber: a CNN that is trained on MNIST takes your face, greyscale, and downscaled to 28 x 28 and says what number it is
+
+

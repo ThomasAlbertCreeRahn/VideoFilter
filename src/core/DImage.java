@@ -13,6 +13,12 @@ public class DImage {
         this.width = width;
         this.height = height;
     }
+    public DImage(int[][] data){
+        img = new PImage(data[0].length, data.length);
+        this.width = data[0].length;
+        this.height = data.length;
+        setPixels(data);
+    }
 
     public DImage(PImage img) {
         this.img = img;
